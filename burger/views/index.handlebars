@@ -1,0 +1,47 @@
+<div class="container">
+    <section id="page-name">
+        <iframe id="main-image" src="https://giphy.com/embed/UAXou95E6oPjW" width="480" height="326" frameBorder="0"
+            class="giphy-embed" allowFullScreen></iframe>
+        <h1>EAT DA BURGER!!!</h1>
+    </section>
+
+    <div class="col-md-6 text center" class="task">
+        <div class="row">
+            {{#each burger_data}}
+            {{#unless this.devoured}}
+            <div class="col-sm-9 text-center">
+                <pre>{{this.id}}. {{this.burger_name}}</pre>
+            </div>
+            <div class="col-sm-6 text-center">
+                <form method="PUT" action="/burgers/update" class="button-size">
+                    <input type="hidden" name="burger_id" type="text" value={{this.id}}>
+                    <hr>
+                    <button type="submit" class="btn btn-primary"> EAT THIS BURGER!!</button>
+
+                </form>
+            </div>
+            {{/unless}}
+            {{/each}}
+        </div>
+    </div>
+
+    <div class="col-sm-6 text-center" class="task">
+        {{#each burger_data}}
+        {{#if this.devoured}}
+        <input class="form control" type="text" placeholder="{{this.id}}.{{this.burger_name}}" readonly>
+        {{/if}}
+        {{/each}}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 text-center enter_section">
+            <form action="/burgers/create" method="POST">
+                <input type="text" name="burger_name" class="form-control" value="" id="enter_text">
+                <button type="submit" class="btn btn-primary" id="text-enter-button">Submit </button>
+            </form>
+            <p>Enter in a burger you would like to eat!</p>
+        </div>
+    </div>
+</div>
