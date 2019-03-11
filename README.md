@@ -14,4 +14,8 @@ https://youtu.be/jtxm8E7CuEM
 
 And of course, the updated portfolio with the added link can be found here: 
 
+https://taadao.github.io/UpdatedPortfolio/portfolio.html
+
+Once I clear up the Heroku, I will get the link loaded and added here and the portfolio. 
+
 
