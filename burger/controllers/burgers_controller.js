@@ -1,27 +1,38 @@
-var express = require("express");
+// think of this as the main file 
+// burger_controller - burger - orm
+
+// controlls all functions for one tables routes
+var express = require('express');
+var burger = require("../models/burger");
+// all api routes
 var router = express.Router();
-var burger = require("../models/burger.js");
 
+// routes
+
+// -- get route for the root route using express
+// -- this route needs to connect to the burger.js (models) to select all the data
 router.get("/", function (req, res) {
-    burger.all(function (burger_data) {
-        console.log(burger_data);
-        res.render("index", {burger_data});
-    })
-})
-
-router.put ("/burgers/update", function(req, res) {
-    burger.update(req.body.burger_id, function(result){
-        console.log(result);
-        res.redirect("/");
-    
+    burger.selectAll(function (data) {
+        // this cb `function (data)` becomes cb in burger.js
+        // we are passing this callback function to burger.selectAll
+        // console.log(data);
+        res.render("index", { burgers: data });
     });
 });
 
-router.post ("/burgers/create", function(req,res) {
-    burger.create(req.body.burger_name, function(result){
-        res.redirect("/");
-    })
-})
+router.post("/burgers/insert", function (req, res) {
+    console.log(req.body);
 
+    burger.insertOne(req.body, function (data) {
+        res.redirect("/");
+    });
+});
+
+router.put("/burgers/:id", function (req, res) {
+    // var updateBurger = { burger_name: "" };
+    burger.updateOne({ devoured: 1 }, req.params.id, function (data) {
+        res.sendStatus(200);
+    });
+});
 
 module.exports = router;

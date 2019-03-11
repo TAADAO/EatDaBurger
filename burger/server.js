@@ -1,19 +1,34 @@
 var express = require("express");
-var exphbs = require("express-handlebars");
+var bodyParser = require("body-parser");
 
 var app = express();
-app.use(express.static(__dirname + "/public"));
 
+// Set the port of our application
+// process.env.PORT lets the port be set by Heroku
 var PORT = process.env.PORT || 8080;
 
-app.engine("handlebars", exphbs({defaultLayout: "main"}));
+// lets client side files use relative file paths
+// specifically the public folder
+app.use(express.static("public"));
+
+// Parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-var routes = require ("./controllers/burgers_controller.js")
+// connects api routes to the server
+var routes = require("./controllers/burgers_controller");
 
-app.use("/", routes);
+// allows the app (express) to use the var routes
+app.use(routes);
 
-
+// Start our server so that it can begin listening to client requests.
 app.listen(PORT, function() {
-    console.log("Server listening on localhost:"+ PORT);
-});
+    // Log (server-side) when our server has started
+    console.log("Server listening on: http://localhost:" + PORT);
+  });
+  

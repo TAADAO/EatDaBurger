@@ -1,47 +1,82 @@
-<div class="container">
-    <section id="page-name">
-        <iframe id="main-image" src="https://giphy.com/embed/UAXou95E6oPjW" width="480" height="326" frameBorder="0"
-            class="giphy-embed" allowFullScreen></iframe>
-        <h1>EAT DA BURGER!!!</h1>
-    </section>
+<div class="row" id="burgerRow">
 
-    <div class="col-md-6 text center" class="task">
-        <div class="row">
-            {{#each burger_data}}
-            {{#unless this.devoured}}
-            <div class="col-sm-9 text-center">
-                <pre>{{this.id}}. {{this.burger_name}}</pre>
-            </div>
-            <div class="col-sm-6 text-center">
-                <form method="PUT" action="/burgers/update" class="button-size">
-                    <input type="hidden" name="burger_id" type="text" value={{this.id}}>
-                    <hr>
-                    <button type="submit" class="btn btn-primary"> EAT THIS BURGER!!</button>
+  <div class="col-md-4" id="notDevoured">
+    <ul>
+      {{#each burgers}} {{#unless this.devoured}}
+      <li>
+        <p>
+          {{this.id}}. {{this.burger_name}}
 
-                </form>
-            </div>
-            {{/unless}}
-            {{/each}}
-        </div>
-    </div>
+          <button data-burgerid="{{this.id}}" class="btn btn-info devourbtn">Devour Burger!</button>
+        </p>
+      </li>
+      {{/unless}} {{/each}}
+    </ul>
+  </div>
 
-    <div class="col-sm-6 text-center" class="task">
-        {{#each burger_data}}
-        {{#if this.devoured}}
-        <input class="form control" type="text" placeholder="{{this.id}}.{{this.burger_name}}" readonly>
-        {{/if}}
-        {{/each}}
-    </div>
+  <div class="col-md-4 text-center" id="createBurgerDiv">
+    <h2>Create Your Burger!!</h2>
+    <form id="createBurgerForm" class="button-size">
+      <textarea type="text" name="createBurger" id="createBurger"></textarea>
+      <br>
+      <button class="btn btn-danger" type="submit">Create Burger!</button>
+    </form>
+  </div>
+
+  <div class="col-md-4" id="devoured">
+    <ul>
+      {{#each burgers}} {{#if this.devoured}}
+      <li>
+        <p>
+          {{this.id}}. {{this.burger_name}}
+        </p>
+      </li>
+      {{/if}} {{/each}}
+    </ul>
+  </div>
+
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 text-center enter_section">
-            <form action="/burgers/create" method="POST">
-                <input type="text" name="burger_name" class="form-control" value="" id="enter_text">
-                <button type="submit" class="btn btn-primary" id="text-enter-button">Submit </button>
-            </form>
-            <p>Enter in a burger you would like to eat!</p>
-        </div>
-    </div>
-</div>
+<script type="text/javascript">
+
+
+  $("#createBurgerForm").on("submit", function (event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    var newBurger = {
+      burger_name: $("#createBurger").val().trim()
+    };
+
+    // Send the POST request.
+    $.ajax("/burgers/insert", {
+      type: "POST",
+      data: newBurger
+    }).then(
+      function () {
+        console.log("created new burger");
+        // Reload the page to get the updated burger list
+        location.reload();
+      }
+    );
+  });
+
+  $(".devourbtn").on("click", function (event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    var id = $(this).data("burgerid");
+    console.log(id);
+
+    // Send the PUT request.
+    $.ajax({
+      method: "PUT",
+      url: "/burgers/" + id
+    }).then(
+      function () {
+        console.log("devoured id ", id);
+        location.reload();
+      }
+    );
+  });
+</script>
