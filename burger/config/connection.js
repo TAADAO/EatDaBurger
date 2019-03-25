@@ -9,7 +9,6 @@ if (process.env.JAWSDB_URL) {
         user: "root",
         password: "trebor",
         database: "burgers_db",
-        PORT: 8080
     });
 };
 
